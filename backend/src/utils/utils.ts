@@ -1,3 +1,5 @@
+import { Hono } from 'hono';
+
 export async function hashPassword(password: string) {
   const encoder = new TextEncoder();
   const data = encoder.encode(password);
@@ -7,4 +9,16 @@ export async function hashPassword(password: string) {
     .map((b) => b.toString(16).padStart(2, '0'))
     .join('');
   return hashHex;
+}
+
+export function generateHonoApp() {
+  return new Hono<{
+    Bindings: {
+      DATABASE_URL: string;
+      JWT_SECRET: string;
+    };
+    Variables: {
+      userId: string;
+    };
+  }>();
 }
